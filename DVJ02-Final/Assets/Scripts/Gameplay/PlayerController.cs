@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float RaycastDistance;
     public GameObject Target;
     public float LerpMultiplier;
+    public delegate void OnStart();
+    public static OnStart OnStartAction;
 
     Vector3 DestPosition;
     bool Moving = false;
@@ -24,6 +26,8 @@ public class PlayerController : MonoBehaviour
         DestPosition = transform.position;
         Target.transform.position = DestPosition;
         Rb = GetComponent<Rigidbody>();
+        if (OnStartAction != null)
+            OnStartAction();
     }
 
     // Update is called once per frame

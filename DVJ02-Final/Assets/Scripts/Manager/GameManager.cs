@@ -13,16 +13,19 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         PickupBehaviour.OnPickupAction = AddScore;
         TimeManager.OnTimeEndedAction = EndGame;
+        PlayerController.OnStartAction = StartGame;
     }
 
     void StartGame()
     {
         Score = 0;
+        SetTimeScale(1);
     }
 
     void EndGame(float time)
     {
         PrevGameTime = time;
+        UpdatePlayerPrefs();
         this.SceneLoader.LoadGOScene();
     }
 
@@ -44,5 +47,18 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public float GameTime
     {
         get { return PrevGameTime; }
+    }
+
+    void UpdatePlayerPrefs()
+    {
+        PlayerPrefs.SetInt("PrevScore", Score);
+        int highscore;
+        if (PlayerPrefs.HasKey("Highscore"))
+            highscore = PlayerPrefs.GetInt("Highscore");
+        else
+            highscore = 0;
+
+        if (Score > highscore)
+                PlayerPrefs.SetInt("Highscore", Score);
     }
 }
