@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public float RaycastDistance;
     public GameObject Target;
     public float LerpMultiplier;
+    public delegate void OnPickup();
+    public static OnPickup OnPickupAction;
 
     Vector3 DestPosition;
     bool Moving = false;
@@ -66,5 +68,10 @@ public class PlayerController : MonoBehaviour
     {
         Moving = false;
         Rb.velocity = Vector3.zero;
+        if (other.tag == "Pickup")
+        {
+            if (OnPickupAction != null)
+                OnPickupAction();
+        }
     }
 }
