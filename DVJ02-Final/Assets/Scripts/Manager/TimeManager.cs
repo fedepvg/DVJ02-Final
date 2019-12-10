@@ -5,7 +5,7 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public float GameTime;
-    public delegate void OnTimeEnded();
+    public delegate void OnTimeEnded(float time);
     public static OnTimeEnded OnTimeEndedAction;
 
     public float TimeLeft;
@@ -23,7 +23,7 @@ public class TimeManager : MonoBehaviour
         if (TimeLeft <= 0)
         {
             if (OnTimeEndedAction != null)
-                OnTimeEndedAction();
+                OnTimeEndedAction(GameTime - TimeLeft);
         }
     }
 

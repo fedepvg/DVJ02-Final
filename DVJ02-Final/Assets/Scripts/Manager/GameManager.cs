@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public SceneLoader SceneLoader;
 
     int Score;
+    float PrevGameTime;
 
     private void Start()
     {
@@ -19,8 +20,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         Score = 0;
     }
 
-    void EndGame()
+    void EndGame(float time)
     {
+        PrevGameTime = time;
         this.SceneLoader.LoadGOScene();
     }
 
@@ -37,5 +39,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public int ActualScore
     {
         get { return Score; }
+    }
+    
+    public float GameTime
+    {
+        get { return PrevGameTime; }
     }
 }
