@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class PlayerController : MonoBehaviour
     public float RaycastDistance;
     public GameObject Target;
     public float LerpMultiplier;
-    public delegate void OnPickup();
-    public static OnPickup OnPickupAction;
 
     Vector3 DestPosition;
     bool Moving = false;
@@ -31,7 +30,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -51,27 +50,26 @@ public class PlayerController : MonoBehaviour
                     LerpTimer = 0;
                 else if (LerpTimer >= 1)
                     LerpTimer = 1;
+                
                 LerpTimer += LerpMultiplier * Time.deltaTime;
                 transform.position += transform.forward * MovementSpeed * Time.deltaTime;
                 Quaternion destRot = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
                 transform.rotation = Quaternion.Lerp(transform.rotation, destRot, LerpTimer);
                 PrevNormal = hit.normal;
 
-                Vector3 target = new Vector3(Target.transform.position.x, transform.position.y, Target.transform.position.z);
-                Quaternion lookRot = Quaternion.LookRotation(target - transform.position);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, RotationSpeed);
+                Vector3 targetRelativePos = new Vector3(Target.transform.position.x, transform.position.y, Target.transform.position.z);
+                Quaternion lookRot = Quaternion.LookRotation(targetRelativePos - transform.position);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, RotationSpeed * Time.deltaTime);
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Moving = false;
-        Rb.velocity = Vector3.zero;
-        if (other.tag == "Pickup")
+        if (other.tag != "Pickup")
         {
-            if (OnPickupAction != null)
-                OnPickupAction();
+            Moving = false;
+            Rb.velocity = Vector3.zero;
         }
     }
 }

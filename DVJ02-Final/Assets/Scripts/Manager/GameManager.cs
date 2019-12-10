@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviourSingleton<GameManager>
 {
-    public float PickupScore;
+    public SceneLoader SceneLoader;
 
-    float Score;
+    int Score;
 
     private void Start()
     {
-        PlayerController.OnPickupAction = AddScore;
+        PickupBehaviour.OnPickupAction = AddScore;
         TimeManager.OnTimeEndedAction = EndGame;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void StartGame()
@@ -27,17 +21,21 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     void EndGame()
     {
-        Debug.Log("zarlanga");
-        LoaderManager.Instance.LoadScene("SampleScene");
+        this.SceneLoader.LoadGOScene();
     }
 
-    void SetTimeScale(float timeScale)
+    public void SetTimeScale(float timeScale)
     {
         Time.timeScale = timeScale;
     }
 
-    void AddScore()
+    void AddScore(int pickupScore)
     {
-        Score += PickupScore;
+        Score += pickupScore;
+    }
+
+    public int ActualScore
+    {
+        get { return Score; }
     }
 }

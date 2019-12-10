@@ -16,6 +16,8 @@ public class SceneLoader : MonoBehaviour
     {
         PreviousScene = LoaderManager.Instance.ActualScene;
         LoaderManager.Instance.ActualScene = ThisScene;
+        LoaderManager.Instance.SceneData = this;
+        GameManager.Instance.SceneLoader = this;
     }
 
     public void ReloadScene()

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class LoaderManager : MonoBehaviourSingleton<LoaderManager>
 {
     string LoadedScene;
+    public SceneLoader SceneData;
     
     public void LoadScene(string target)
     {

@@ -8,11 +8,12 @@ public class TimeManager : MonoBehaviour
     public delegate void OnTimeEnded();
     public static OnTimeEnded OnTimeEndedAction;
 
-    float TimeLeft;
+    public float TimeLeft;
 
     void Start()
     {
         TimeLeft = GameTime;
+        UIInGame.OnGetTimeAction = GetTimeLeft;
     }
 
     // Update is called once per frame
@@ -24,6 +25,10 @@ public class TimeManager : MonoBehaviour
             if (OnTimeEndedAction != null)
                 OnTimeEndedAction();
         }
+    }
 
+    float GetTimeLeft()
+    {
+        return TimeLeft;
     }
 }
