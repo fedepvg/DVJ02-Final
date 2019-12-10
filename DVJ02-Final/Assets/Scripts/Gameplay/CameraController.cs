@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float YOffset;
-    public float ZOffset;
+    public Vector3 CameraOffset;
     public float ZLookOffset;
     public Transform PlayerTransform;
 
     void Update()
     {
-        transform.position = PlayerTransform.position + Vector3.up * YOffset - PlayerTransform.forward * ZOffset;
+        transform.position = PlayerTransform.position + Vector3.up * CameraOffset.y - PlayerTransform.forward * CameraOffset.z;
         transform.LookAt(PlayerTransform.position + PlayerTransform.forward * ZLookOffset);
     }
 }
